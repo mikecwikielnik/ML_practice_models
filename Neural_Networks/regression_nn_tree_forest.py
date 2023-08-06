@@ -70,7 +70,7 @@ val_loss = history.history['val_loss']  # validation
 epochs = range(1, len(loss) + 1)
 plt.plot(epochs, loss, 'y', label='Training Loss')
 plt.plot(epochs, val_loss, 'r', label='Validation loss')
-plt.title('Training and Validation loss')
+# plt.title('Training and validation loss')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
@@ -87,4 +87,91 @@ plt.ylabel('Mean Squared Error (accuracy)')
 plt.legend()
 plt.show()
 
+# ------- predict on test data -----------
+
+predictions = model.predict(X_test_scaled[:5])
+print("Predicted values are:\n", predictions)
+print("Real values are:\n", y_test[:5])
+
+#----------------------------------------
+
+"""
+now we compare our predictions on test data with that of other models
+
+we are comparing models on the metrics of:
+
+mean-squared-error (loss)
+mean-absolute-error (accuracy)
+
+"""
+
+# The above neural network metrics
+
+mse_neutral, mae_neutral = model.evaluate(X_test_scaled, y_test)
+
+print('Mean-Squared-Error (loss) from neural net:\n', mse_neutral)
+print('Mean-Absolute-Error (accuracy) from neural net:\n', mae_neutral)
+
+########################################################################
+
+# -------- linear regression (not linear regression using nn) ---------------
+
+from sklearn import linear_model
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+lr_model = linear_model.LinearRegression()
+
+lr_model.fit(X_train_scaled, y_train)
+
+y_pred_lr = lr_model.predict(X_test_scaled) # predictions var in nn
+
+mse_lr = mean_squared_error(y_test, y_pred_lr)
+mae_lr = mean_absolute_error(y_test, y_pred_lr)
+
+print('Mean squared error (loss) from linear regression:\n', mse_lr)
+print('Mean absolute error (accuracy) from linear regression:\n', mae_lr)
+
+#########################################################################
+
+# ------------- decision tree -----------------------------
+
+from sklearn.tree import DecisionTreeRegressor
+
+tree = DecisionTreeRegressor()
+
+tree.fit(X_train_scaled, y_train)
+
+y_pred_tree = tree.predict(X_test_scaled)
+
+mse_dt = mean_squared_error(y_test, y_pred_tree)
+mae_dt = mean_absolute_error(y_test, y_pred_tree)
+
+print('Mean squared error from decision tree:\n', mse_dt)
+print('Mean absolute error from decision tree:\n', mae_dt)
+
+##########################################################################
+
+# -------------- Random Forest ----------------------------
+
+from sklearn.ensemble import RandomForestRegressor
+
+model = RandomForestRegressor(n_estimators = 30, random_state = 42)
+
+model.fit(X_train_scaled, y_train)
+
+y_pred_rf = model.predict(X_test_scaled)
+
+mse_rf = mean_squared_error(y_test, y_pred_rf)
+mae_rf = mean_absolute_error(y_test, y_pred_rf)
+
+print('Mean squared error from random forest (loss):\n', mse_rf)
+print('Mean absolute error from random forest (accuracy):\n', mae_rf)
+
+# feature ranking! 
+
+import pandas as pd
+
+feature_list = list(X.columns)
+feature_imp = pd.Series(model.feature_importances_, index=feature_list).sort_values(ascending=False)
+print(feature_imp)
 
