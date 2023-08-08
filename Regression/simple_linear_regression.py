@@ -30,3 +30,39 @@ model.score(X_train, y_predictions)
 print("the mean square error is:\n", mean_squared_error(y_test, y_predictions))
 
 print("the mean absolute error is:\n", mean_absolute_error(y_test, y_predictions))
+
+################################################
+
+from sklearn.tree import DecisionTreeRegressor
+
+tree = DecisionTreeRegressor()
+
+tree.fit(X_train, y_train)
+
+tree_y_predictions = tree.predict(X_test)
+
+print(y_train, tree_y_predictions)
+
+tree.score(X_train, tree_y_predictions)
+
+print("MSE (loss) for decision tree:\n", mean_squared_error(y_train, tree_y_predictions))
+print("MAE (accuracy) for decision tree:\n", mean_absolute_error(y_train, tree_y_predictions))
+
+
+###################################################
+
+from sklearn.ensemble import RandomForestRegressor
+
+forest = RandomForestRegressor()
+
+forest.fit(X_train, y_train)
+
+forest_y_predictions = forest.predict(X_test)
+
+print(y_train, forest_y_predictions)
+
+forest.score(X_train, forest_y_predictions)
+
+print("MSE (loss) for random forest:\n", mean_squared_error(y_train, forest_y_predictions))
+print("MAE (accuracy) for random forest:\n", mean_absolute_error(y_train, forest_y_predictions))
+      
