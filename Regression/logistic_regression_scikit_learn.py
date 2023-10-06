@@ -63,5 +63,23 @@ print(X_test)
 from sklearn.linear_model import LogisticRegression
 
 model = LogisticRegression()
+model.fit(X_train, y_train)
 
+# 8) testing the model
 
+y_hat = model.predict(X_test)
+
+# 9) verify the accuracy
+
+from sklearn import metrics
+
+print("Accuracy = ", metrics.accuracy_score(y_test, y_hat))
+
+# 10) weights
+
+print(model.coef_)
+
+weights = pd.Series(model.coef_[0], index = X.columns.values) # index gives us the variable names
+print(weights) # gives a series of the model coefficients
+
+# negative value means negative correlation
